@@ -1,25 +1,33 @@
-import urllib.request
-import json
 
-part = "MTXJ3LL/A"   # test part
-zip_code = "24060"
+import requests
 
-url = f"https://www.apple.com/shop/fulfillment-messages?pl=true&parts.0={part}&location={zip_code}"
 
-print("Checking URL:", url)
+part_number = "MFXH4LL"
+zip_code = "20171"
+# Use either endpoint variant
+url = "https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0=MFXH4LL%2FA&location=20171"
 
+print(url)
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
+    "Accept": "application/json, text/javascript, */*; q=0.01",
+    "Referer": "https://www.apple.com/shop/buy-iphone/iphone-17-pro",  # Important: match product page
+    "Accept-Language": "en-US,en;q=0.9",
+    "Connection": "keep-alive"
 }
 
-req = urllib.request.Request(url, headers=headers)
-
 try:
-    with urllib.request.urlopen(req) as resp:
-        data = resp.read().decode('utf-8')
-        parsed = json.loads(data)
-        print("Status:", resp.status)
-        print("\nPretty JSON:")
-        print(json.dumps(parsed, indent=2))
+    response = requests.get(url, headers=headers, timeout=10)
+    print(f"Status: {response.status_code}")
+    
+    if response.status_code == 200:
+        data = response.json()
+        print(data)
+    elif response.status_code == 541:
+        print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
+    else:
+        print(f"Error: {response.status_code} - {response.text[:300]}")
 except Exception as e:
-    print("Error:", e)
+    print(f"Request failed: {e}")
+
+
