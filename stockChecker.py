@@ -8,16 +8,16 @@ zip_code = "20171"
 url = "https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0=MFXH4LL%2FA&location=20171"
 
 print(url)
-headers = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
-    "Accept": "application/json, text/javascript, */*; q=0.01",
-    "Referer": "https://www.apple.com/shop/buy-iphone/iphone-17-pro",  # Important: match product page
-    "Accept-Language": "en-US,en;q=0.9",
-    "Connection": "keep-alive"
-}
+# headers = {
+#     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
+#     "Accept": "application/json, text/javascript, */*; q=0.01",
+#     "Referer": "https://www.apple.com/shop/buy-iphone/iphone-17-pro",  # Important: match product page
+#     "Accept-Language": "en-US,en;q=0.9",
+#     "Connection": "keep-alive"
+# }
 
 try:
-    response = requests.get(url, headers=headers, timeout=10)
+    response = requests.get(url, timeout=10)
     print(f"Status: {response.status_code}")
     
     if response.status_code == 200:
