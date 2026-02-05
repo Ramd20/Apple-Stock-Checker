@@ -2,7 +2,7 @@
 import requests
 import time
 
-part_number = "MFXH4LL"
+part_number = "MFXH4LL" #hard coded for now 
 zip_code = "20171"
 # Use either endpoint variant
 url = "https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0=MFXH4LL%2FA&location=20171"
@@ -17,4 +17,5 @@ headers = {
 
 for i in range(1):
     response = requests.get(url)
-    print(str(i) + ":" + str(response.status_code))
+    print(str(i) + ":" + str(response.status_code)) #7 min unban
+    time.sleep(5)

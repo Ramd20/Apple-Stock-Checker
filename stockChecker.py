@@ -1,11 +1,12 @@
 
 import requests
+import json
 
-
-part_number = "MFXH4LL"
-zip_code = "20171"
+part_number = "MFXP4LL"
+zip_code = "19720"
 # Use either endpoint variant
-url = "https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0=MFXH4LL%2FA&location=20171"
+#MFXP4LL/A -> 1tb Orange
+url = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={part_number}%2FA&location={zip_code}"
 
 print(url)
 # headers = {
@@ -22,7 +23,7 @@ try:
     
     if response.status_code == 200:
         data = response.json()
-        print(data)
+        print(json.dumps(data, indent=2)) #this makes it look nicer
     elif response.status_code == 541:
         print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
     else:
