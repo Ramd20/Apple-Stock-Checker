@@ -2,10 +2,11 @@
 import requests
 import json
 
-part_number = "MFXP4LL"
-zip_code = "19720"
+part_number = "MFXN4LL"
+zip_code = "97223"
 # Use either endpoint variant
 #MFXP4LL/A -> 1tb Orange
+#MFXN4LL -> 1tb Silver
 url = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={part_number}%2FA&location={zip_code}"
 
 print(url)
@@ -23,7 +24,21 @@ try:
     
     if response.status_code == 200:
         data = response.json()
-        print(json.dumps(data, indent=2)) #this makes it look nicer
+
+        firstStore = data["body"]["stores"][0] #First store is the closest store with availability
+        secondStore = data["body"]["stores"][1] 
+        thirdStore = data["body"]["stores"][2] 
+
+        
+        #print(json.dumps(firstStore, indent=2))
+
+        print(firstStore["storeName"])
+        print(secondStore["storeName"])
+        print(thirdStore["storeName"])
+
+
+
+
     elif response.status_code == 541:
         print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
     else:
