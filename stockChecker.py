@@ -3,7 +3,7 @@ import requests
 import json
 
 part_number = "MFXN4LL"
-zip_code = "97223"
+zip_code = "99999"
 # Use either endpoint variant
 #MFXP4LL/A -> 1tb Orange
 #MFXN4LL -> 1tb Silver
@@ -18,32 +18,44 @@ print(url)
 #     "Connection": "keep-alive"
 # }
 
-try:
-    response = requests.get(url, timeout=10)
-    print(f"Status: {response.status_code}")
+response = requests.get(url, timeout=10)
+print(f"Status: {response.status_code}")
+
+if response.status_code == 200:
+    data = response.json()
+
+    # firstStore = data["body"]["stores"][0] #First store is the closest store with availability
+    # secondStore = data["body"]["stores"][1] 
+    # thirdStore = data["body"]["stores"][2] 
+
+    print(json.dumps(data, indent=2))
     
-    if response.status_code == 200:
-        data = response.json()
+    
+    #print(json.dumps((firstStore["partsAvailability"]), indent=2))
 
-        firstStore = data["body"]["stores"][0] #First store is the closest store with availability
-        secondStore = data["body"]["stores"][1] 
-        thirdStore = data["body"]["stores"][2] 
+    
+    #print(firstStore[part_number + "/A"])
 
+    for store in data["body"]["stores"]:
+        print(store["storeName"], store["state"])
+
+        partsAvailability = store["partsAvailability"] #digs through json to get availability
+        modelInfo = partsAvailability[part_number + "/A"]
         
-        #print(json.dumps(firstStore, indent=2))
+        print(modelInfo["pickupDisplay"]) #shows available or unavailable
+        print(" ")        
+    
+    # print(firstStore["storeName"])
+    # print(secondStore["storeName"])
+    # print(thirdStore["storeName"])
 
-        print(firstStore["storeName"])
-        print(secondStore["storeName"])
-        print(thirdStore["storeName"])
 
 
 
+elif response.status_code == 541:
+    print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
+else:
+    print(f"Error: {response.status_code} - {response.text[:300]}")
 
-    elif response.status_code == 541:
-        print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
-    else:
-        print(f"Error: {response.status_code} - {response.text[:300]}")
-except Exception as e:
-    print(f"Request failed: {e}")
 
 
