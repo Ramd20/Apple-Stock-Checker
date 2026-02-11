@@ -23,39 +23,30 @@ print(f"Status: {response.status_code}")
 
 if response.status_code == 200:
     data = response.json()
+    body = data["body"]
+   
 
-    # firstStore = data["body"]["stores"][0] #First store is the closest store with availability
-    # secondStore = data["body"]["stores"][1] 
-    # thirdStore = data["body"]["stores"][2] 
-
-    print(json.dumps(data, indent=2))
+    if "stores" in body: #making sure zip code is valid    
     
     
-    #print(json.dumps((firstStore["partsAvailability"]), indent=2))
 
+        for store in body["stores"]:
+            print(store["storeName"], store["state"])
+
+            partsAvailability = store["partsAvailability"] #digs through json to get availability
+            modelInfo = partsAvailability[part_number + "/A"]
+            
+            print(modelInfo["pickupDisplay"]) #shows available or unavailable
+            print(" ")        
+  
     
-    #print(firstStore[part_number + "/A"])
-
-    for store in data["body"]["stores"]:
-        print(store["storeName"], store["state"])
-
-        partsAvailability = store["partsAvailability"] #digs through json to get availability
-        modelInfo = partsAvailability[part_number + "/A"]
-        
-        print(modelInfo["pickupDisplay"]) #shows available or unavailable
-        print(" ")        
-    
-    # print(firstStore["storeName"])
-    # print(secondStore["storeName"])
-    # print(thirdStore["storeName"])
-
-
+    else:
+        print("invalid zip code")
 
 
 elif response.status_code == 541:
     print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
 else:
     print(f"Error: {response.status_code} - {response.text[:300]}")
-
 
 
