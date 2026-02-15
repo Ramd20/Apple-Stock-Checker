@@ -1,12 +1,14 @@
 
 import requests
 import json
+import time
 
-part_number = "MFXN4LL"
-zip_code = "99999"
+part_number = "MFXG4LL"
+zip_code = "97002"
 # Use either endpoint variant
 #MFXP4LL/A -> 1tb Orange
 #MFXN4LL -> 1tb Silver
+#MFXG4LL -> 256GB Silver
 url = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={part_number}%2FA&location={zip_code}"
 
 print(url)
@@ -18,35 +20,46 @@ print(url)
 #     "Connection": "keep-alive"
 # }
 
-response = requests.get(url, timeout=10)
-print(f"Status: {response.status_code}")
+while True:
+    response = requests.get(url, timeout=10)
+    print(f"Status: {response.status_code}")
 
-if response.status_code == 200:
-    data = response.json()
-    body = data["body"]
-   
-
-    if "stores" in body: #making sure zip code is valid    
-    
+    if response.status_code == 200:
+        data = response.json()
+        body = data["body"]
     
 
-        for store in body["stores"]:
-            print(store["storeName"], store["state"])
+        if "stores" in body: #making sure zip code is valid    
+        
+        
 
-            partsAvailability = store["partsAvailability"] #digs through json to get availability
-            modelInfo = partsAvailability[part_number + "/A"]
-            
-            print(modelInfo["pickupDisplay"]) #shows available or unavailable
-            print(" ")        
-  
+            # for store in body["stores"]:
+            #     print(store["storeName"], store["state"])
+
+            #     partsAvailability = store["partsAvailability"] #digs through json to get availability
+            #     modelInfo = partsAvailability[part_number + "/A"]
+                
+            #     print(modelInfo["pickupDisplay"]) #shows available or unavailable
+            #     print(" ")        
+
+            firstStore = body["stores"][0]
+
+            if firstStore["state"] == "OR": #remove the hardcoding and change to softcoding later
+                print(firstStore["storeName"])
+                print("available")                #first store is 99 percent of the time an available store
+                
+            else:
+                print("unavailable")
     
+        
+        else:
+            print("invalid zip code")
+
+
+    elif response.status_code == 541:
+        print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
     else:
-        print("invalid zip code")
+        print(f"Error: {response.status_code} - {response.text[:300]}")
 
 
-elif response.status_code == 541:
-    print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
-else:
-    print(f"Error: {response.status_code} - {response.text[:300]}")
-
-
+    time.sleep(600)
