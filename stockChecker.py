@@ -83,7 +83,7 @@ def main():
 
     while True:
         checkCount += 1
-        currentTime = time.strftime('%H:%M:%S')
+        currentTime = time.strftime('%I:%M:%S %p')
         result = checkSingleStore(part_number, storeNumber)
 
         if result["error"]:
@@ -114,7 +114,8 @@ def main():
 
             message = f"{emoji} Check #{checkCount}\n Time: {currentTime}\n{currentStatus} at {storeName}"
             sendDiscordMessage(message)
-        
+
+        time.sleep(600) #check every 10 minutes
         
 
 
