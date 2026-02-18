@@ -24,7 +24,7 @@ storyeUrl = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={
 print(url)
 
 def checkSingleStore(partNumber, storeNumber):
-    storeUrl = f"https://www.apple.com/shop/retail/pickup-message?pl=true7betbe&parts.0={partNumber}%2FA&store={storeNumber}"
+    storeUrl = f"https://www.apple.com/shop/retail/pickup-message?pl=true7&parts.0={partNumber}%2FA&store={storeNumber}"
     try:
         response = requests.get(storeUrl, timeout=10)
         print(response.status_code)#DEBUG STATEMENT
@@ -114,6 +114,7 @@ def main():
 
             message = f"{emoji} Check #{checkCount}\n Time: {currentTime}\n{currentStatus} at {storeName}"
             sendDiscordMessage(message)
+        
         
 
 
