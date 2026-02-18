@@ -13,5 +13,4 @@ for i in range(1):
 
     print(response.status_code)
     print(response.json())
-# webhook_url = "https://discord.com/api/webhooks/1472440491567087789/_kHlDe4i0a1Xwro5FPqGBVeIpyvpXYWXzJkFUWZ3lOIqMgEm0ef69qcFFWpu54faQMLr"
 # requests.post(webhook_url, json={"content": "iPhone available!"})
