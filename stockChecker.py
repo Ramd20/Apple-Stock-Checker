@@ -4,7 +4,8 @@ import json
 import time
 import os
 from dotenv import load_dotenv
-
+import pytz
+from datetime import datetime
 
 load_dotenv()
 WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK")
@@ -83,7 +84,10 @@ def main():
 
     while True:
         checkCount += 1
-        currentTime = time.strftime('%I:%M:%S %p')
+
+        eastern = pytz.timezone('US/Eastern')
+        currentTime = datetime.now(eastern).strftime('%I:%M:%S %p')
+
         result = checkSingleStore(part_number, storeNumber)
 
         if result["error"]:
