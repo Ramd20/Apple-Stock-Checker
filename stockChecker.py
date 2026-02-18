@@ -75,6 +75,7 @@ def checkSingleStore(partNumber, storeNumber):
 def sendDiscordMessage(message):
     response = requests.post(WEBHOOK_URL, json={"content": message})
 
+#redeploy change
 def main():
     print(f"Starting monitor for store {storeNumber}, part {part_number}")
     sendDiscordMessage(f"🤖 Bot started monitoring {part_number} at store {storeNumber}")
