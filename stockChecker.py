@@ -9,12 +9,13 @@ from datetime import datetime
 
 load_dotenv()
 WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK")
-part_number = "MFXN4LL"
+part_number = "MFXR4LL"
 zip_code = "19720"
 # Use either endpoint variant
 #MFXP4LL/A -> 1tb Orange
 #MFXN4LL -> 1tb Silver
 #MFXG4LL -> 256GB Silver
+#MFXR4LL ->2tb Silver
 
 #christiana store -> R102
 storeNumber = "R102"
