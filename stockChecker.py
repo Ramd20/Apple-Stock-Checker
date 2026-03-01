@@ -19,14 +19,14 @@ zip_code = "19720"
 
 #christiana store -> R102
 storeNumber = "R102"
-url = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={part_number}%2FA&location={zip_code}"
+url = f"https://www.apple.com/shop/retail/pickup-message?pl=true7&parts.0={part_number}%2FA&location={zip_code}"
 storyeUrl = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={part_number}%2FA&store={storeNumber}"
 
 
 print(url)
 
 def checkSingleStore(partNumber, storeNumber):
-    storeUrl = f"https://www.apple.com/shop/retail/pickup-message?pl=true7&parts.0={partNumber}%2FA&store={storeNumber}"
+    storeUrl = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={partNumber}%2FA&store={storeNumber}"
     try:
         response = requests.get(storeUrl, timeout=10)
         print(response.status_code)#DEBUG STATEMENT
@@ -88,95 +88,100 @@ def main():
         checkCount += 1
 
         eastern = pytz.timezone('US/Eastern')
+        pauseTime = datetime.now(eastern) 
         currentTime = datetime.now(eastern).strftime('%I:%M:%S %p')
+        if pauseTime.hour >= 9 and pauseTime.hour <= 21:
 
-        result = checkSingleStore(part_number, storeNumber)
+            result = checkSingleStore(part_number, storeNumber)
 
-        if result["error"]:
-            errorMessage = result["error"]
-            message = f"❌ Check #{checkCount} (Error): {errorMessage}"
-            sendDiscordMessage(message)
+            if result["error"]:
+                errorMessage = result["error"]
+                message = f"❌ Check #{checkCount} (Error): {errorMessage}"
+                sendDiscordMessage(message)
 
-        else:
-            currentStatus = result["status"]
-            storeName = result["name"]
-
-            #CHANGE NOTIFY TO BE IMPLEMENTED LATER
-            # if currentStatus == "available" and lastStatus == "unavailable":
-            #     message = f"{part_number} is available at {storeName}"
-            #     sendDiscordMessage(message)
-            #     lastStatus = "available"
-
-            # elif currentStatus == "unavailable" and lastStatus == "available":
-            #     message = f"{part_number} is no longer available at {storeName}"
-            #     sendDiscordMessage(message)
-            #     lastStatus = "unavailable"
-            
-
-            if currentStatus == "available":
-                emoji = "🟢"
             else:
-                emoji = "⚪"
+                currentStatus = result["status"]
+                storeName = result["name"]
 
-            message = f"{emoji} Check #{checkCount}\n Time: {currentTime}\n{currentStatus} at {storeName}"
-            sendDiscordMessage(message)
+                #CHANGE NOTIFY TO BE IMPLEMENTED LATER
+                # if currentStatus == "available" and lastStatus == "unavailable":
+                #     message = f"{part_number} is available at {storeName}"
+                #     sendDiscordMessage(message)
+                #     lastStatus = "available"
 
-        time.sleep(600) #check every 10 minutes
-        
+                # elif currentStatus == "unavailable" and lastStatus == "available":
+                #     message = f"{part_number} is no longer available at {storeName}"
+                #     sendDiscordMessage(message)
+                #     lastStatus = "unavailable"
+                
+
+                if currentStatus == "available":
+                    emoji = "🟢"
+                else:
+                    emoji = "⚪"
+
+                message = f"{emoji} Check #{checkCount}\n Time: {currentTime}\n{currentStatus} at {storeName}"
+                sendDiscordMessage(message)
+
+            time.sleep(600) #check every 10 minutes
+
+        else: #if during the hours of 9pm - 9am
+            time.sleep(3600)
 
 
 if __name__ == "__main__":
     main()
-# response = requests.get(storeUrl, timeout=10)
-# print(f"Status: {response.status_code}")
 
-# if response.status_code == 200:
-#     data = response.json()
-#     body = data["body"]
+    # response = requests.get(storeUrl, timeout=10)
+    # print(f"Status: {response.status_code}")
+
+    # if response.status_code == 200:
+    #     data = response.json()
+    #     body = data["body"]
 
 
-#     if "stores" in body: #making sure zip code is valid    
+    #     if "stores" in body: #making sure zip code is valid    
+            
+    #         #SINGLE STORE LOGIC
+    #         #----------------------------------------
+    #         specificStore = body["stores"][0]
+
+    #         availability = specificStore["partsAvailability"][f"{part_number}/A"]["pickupDisplay"]
+
+    #         print(specificStore["storeName"])
+    #         print(availability)
+
+
+    #         #MULTIPLE STORE LOGIC
+    #         #---------------------------------------------------------
+    #         # for store in body["stores"]:
+    #         #     print(json.dumps(store, indent=2))
+    #         #     # print(store["storeName"], store["state"])
+
+    #         #     # partsAvailability = store["partsAvailability"] #digs through json to get availability
+    #         #     # modelInfo = partsAvailability[part_number + "/A"]
+                
+    #         #     # print(modelInfo["pickupDisplay"]) #shows available or unavailable
+    #         #     # print(" ")        
+
+    #         # # firstStore = body["stores"][0]
+
+    #         # # if firstStore["state"] == "OR": #remove the hardcoding and change to softcoding later
+    #         # #     print(firstStore["storeName"])
+    #         # #     print("available")                #first store is 99 percent of the time an available store
+                
+    #         # # else:
+    #         # #     print("unavailable")
+
         
-#         #SINGLE STORE LOGIC
-#         #----------------------------------------
-#         specificStore = body["stores"][0]
-
-#         availability = specificStore["partsAvailability"][f"{part_number}/A"]["pickupDisplay"]
-
-#         print(specificStore["storeName"])
-#         print(availability)
+    #     else:
+    #         print("invalid zip code")
 
 
-#         #MULTIPLE STORE LOGIC
-#         #---------------------------------------------------------
-#         # for store in body["stores"]:
-#         #     print(json.dumps(store, indent=2))
-#         #     # print(store["storeName"], store["state"])
-
-#         #     # partsAvailability = store["partsAvailability"] #digs through json to get availability
-#         #     # modelInfo = partsAvailability[part_number + "/A"]
-            
-#         #     # print(modelInfo["pickupDisplay"]) #shows available or unavailable
-#         #     # print(" ")        
-
-#         # # firstStore = body["stores"][0]
-
-#         # # if firstStore["state"] == "OR": #remove the hardcoding and change to softcoding later
-#         # #     print(firstStore["storeName"])
-#         # #     print("available")                #first store is 99 percent of the time an available store
-            
-#         # # else:
-#         # #     print("unavailable")
-
-    
-#     else:
-#         print("invalid zip code")
-
-
-# elif response.status_code == 541:
-#     print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
-# else:
-#     print(f"Error: {response.status_code} - {response.text[:300]}")
+    # elif response.status_code == 541:
+    #     print("541 error - likely rate limit or blocked. Wait 5-10 min, try VPN, or add more delays.")
+    # else:
+    #     print(f"Error: {response.status_code} - {response.text[:300]}")
 
 
 
