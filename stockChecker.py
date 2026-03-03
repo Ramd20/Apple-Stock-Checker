@@ -141,7 +141,7 @@ def checkMultipleStores(partList, storeNumber):
 def sendDiscordMessage(message):
     response = requests.post(WEBHOOK_URL, json={"content": message})
 
-#redeploy change
+#redeploy change 2
 def main():
     print(f"Starting monitor for store {storeNumber}, {", ".join(partList)}")
     sendDiscordMessage(f"🤖 Bot started monitoring {", ".join(partList)} at store {storeNumber}")
