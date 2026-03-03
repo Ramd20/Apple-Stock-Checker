@@ -1,16 +1,40 @@
-
+from stockChecker import *
 import requests
 import time
 
 part_number = "MFXH4LL" #hard coded for now 
 zip_code = "20171"
+TwoTBSilver = "MFXR4LL"
+TwoTBOrange = "MFXT4LL"
+TwoTBNavy = "MFXU4LL"
+zip_code = "19720"
+
+partList = [TwoTBNavy, TwoTBOrange, TwoTBSilver]
 # Use either endpoint variant
-url = "https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0=MFXH4LL%2FA&location=20171"
 
-response = requests.get(url)
-for i in range(1):
-    response = requests.get(url)
+result = checkMultipleStores(partList, "R102")
 
-    print(response.status_code)
-    print(response.json())
-# requests.post(webhook_url, json={"content": "iPhone available!"})
+emojiDict = {
+        
+}
+for part in result:
+    if part[0] == "M":
+        if result[part] == "available":
+            emojiDict[part] = "🟢"
+        else:
+            emojiDict[part] = "⚪"
+
+
+                # if currentStatus == "available":
+                #     emoji = "🟢"
+                # else:
+                #     emoji = "⚪"
+
+header =  result["name"]
+message = ""
+
+for model in emojiDict:
+    message += f"{emojiDict[model]} {model} \n"
+#message = f"{emoji} Check #{checkCount}\n Time: {currentTime}\n{currentStatus} at {storeName}"
+finalMessage = header + "\n" + message
+sendDiscordMessage(finalMessage)
