@@ -14,7 +14,11 @@ TwoTBOrange = "MFXT4LL"
 TwoTBNavy = "MFXU4LL"
 zip_code = "19720"
 
-partList = [TwoTBNavy, TwoTBOrange, TwoTBSilver]
+Orange256 = "MFXH4LL"
+Silver256 = "MFXG4LL"
+Navy256 = "MFXJ4LL"
+
+partList = [Orange256, Silver256, Navy256]
 # Use either endpoint variant
 #MFXP4LL/A -> 1tb Orange
 #MFXN4LL -> 1tb Silver
@@ -22,7 +26,8 @@ partList = [TwoTBNavy, TwoTBOrange, TwoTBSilver]
 #MFXR4LL ->2tb Silver
 
 #christiana store -> R102
-storeNumber = "R102"
+#Reston store -> R271
+storeNumber = "R271"
 #url = f"https://www.apple.com/shop/retail/pickup-message?pl=true7&parts.0={part_number}%2FA&location={zip_code}"
 #storyeUrl = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={part_number}%2FA&store={storeNumber}"
 
